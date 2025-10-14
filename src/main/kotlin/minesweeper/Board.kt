@@ -22,7 +22,7 @@ class Board(
             val row = Random.nextInt(height)
 
             val col = Random.nextInt(width )
-            if (row == y || col == x) continue
+            if (row == y && col == x) continue
             if (mines.add(Pair(row, col))) cells[row][col] = cells[row][col].copy(isMine = true)
         }
     }
@@ -76,6 +76,7 @@ class Board(
     }
 
     fun toggleFlag(x: Int, y: Int) {
+        if (x !in 0 until width || y !in 0 until height) return
         val cell = cells[y][x]
         if (cell.state == CellState.CLOSED) {
             cells[y][x] = cell.copy(state = CellState.FLAGGED)
@@ -90,7 +91,7 @@ class Board(
 
     fun isWin(): Boolean {
         return cells.flatten().all { cell ->
-            cell.isMine && cell.state == CellState.FLAGGED || cell.state == CellState.OPENED
+            cell.isMine || cell.state == CellState.OPENED
         }
     }
 }

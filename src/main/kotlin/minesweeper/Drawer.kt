@@ -2,7 +2,7 @@ package minesweeper
 
 object Drawer {
     fun draw(board: Board, drawMines: Boolean = false) {
-        print("|")
+        print(" |")
         for (x in 0 until board.width) print("${x + 1}")
         println("|")
         println("—│—————————│")
