@@ -13,14 +13,13 @@ class Board(
     private var minesGenerated = false
 
     init {
-        if (mineCount > width * height) throw IllegalStateException("Too many mines")
+        require (mineCount < width * height) { "Too many mines"}
     }
 
     private fun generateMinesAvoiding(x: Int, y: Int) {
 
         while (mines.size < mineCount) {
             val row = Random.nextInt(height)
-
             val col = Random.nextInt(width )
             if (row == y && col == x) continue
             if (mines.add(Pair(row, col))) cells[row][col] = cells[row][col].copy(isMine = true)
@@ -47,8 +46,8 @@ class Board(
     }
 
     fun open(x: Int, y: Int) {
-        if (x !in 0 until width || y !in 0 until height) {
-            return
+        require( x in 0 until width || y in 0 until height) {
+            "out of bounds"
         }
 
         if (!minesGenerated){
@@ -76,7 +75,9 @@ class Board(
     }
 
     fun toggleFlag(x: Int, y: Int) {
-        if (x !in 0 until width || y !in 0 until height) return
+        require( x in 0 until width || y in 0 until height) {
+            "out of bounds"
+        }
         val cell = cells[y][x]
         if (cell.state == CellState.CLOSED) {
             cells[y][x] = cell.copy(state = CellState.FLAGGED)
